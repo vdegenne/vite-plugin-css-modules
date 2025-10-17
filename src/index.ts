@@ -8,7 +8,7 @@ export function cssModules(): Plugin {
 		enforce: 'pre',
 
 		async transform(code, id) {
-			if (!id.endsWith('.ts') || !id.endsWith('.js')) return null
+			if (!id.endsWith('.ts') && !id.endsWith('.js')) return null
 
 			const importRegex =
 				/import\s+(\w+)\s+from\s+['"]([^'"]+\.css)['"]\s+with\s*\{\s*type\s*:\s*['"]css['"]\s*\}\s*;?/g
