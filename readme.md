@@ -22,4 +22,4 @@ import styles from './stylesheet.css' with {type: 'css'}
 
 will resolve the import to a CSSStyleSheet containing the styles defined in the file.
 
-Add `@vdegenne/vite-plugin-css-modules` in `tsconfig.json` types to override vite `"*.css"` imports if you need.
+Add `@vdegenne/vite-plugin-css-modules/css` in `tsconfig.json` types to override vite `"*.css"` imports if you need.
