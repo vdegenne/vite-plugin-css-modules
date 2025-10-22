@@ -4,7 +4,7 @@ import {type Plugin} from 'vite'
 
 export function cssModules(): Plugin {
 	return {
-		name: 'vite-inline-css-modules',
+		name: 'vite-css-modules',
 		enforce: 'pre',
 
 		async transform(code, id) {
