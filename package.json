@@ -1,6 +1,6 @@
 {
 	"name": "@vdegenne/vite-plugin-css-modules",
-	"version": "0.1.5",
+	"version": "0.1.6",
 	"type": "module",
 	"exports": {
 		".": {
@@ -15,9 +15,9 @@
 		"./lib/"
 	],
 	"devDependencies": {
-		"@types/node": "^24.8.1",
+		"@types/node": "^24.9.1",
 		"typescript": "^5.9.3",
-		"vite": "^7.1.10",
+		"vite": "^7.1.11",
 		"wireit": "^0.14.12"
 	},
 	"wireit": {
