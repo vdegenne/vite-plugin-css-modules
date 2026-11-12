@@ -1,3 +1,4 @@
+import {init, parse} from 'es-module-lexer'
 import fs from 'fs'
 import path from 'path'
 import {type Plugin} from 'vite'
@@ -10,19 +11,29 @@ export function cssModules(): Plugin {
 		async transform(code, id) {
 			if (!id.endsWith('.ts') && !id.endsWith('.js')) return null
 
-			const importRegex =
-				/import\s+(\w+)\s+from\s+['"]([^'"]+\.css)['"]\s+with\s*\{\s*type\s*:\s*['"]css['"]\s*\}\s*;?/g
+			await init()
+			const [imports] = parse(code)
 
-			let match
+			const cssImports = imports.filter(
+				(i) =>
+					i.type === 'static' &&
+					i.attributes?.some(
+						([key, value]) => key === 'type' && value === 'css',
+					),
+			)
+
+			if (!cssImports.length) return null
+
 			let transformed = code
-			let hasMatch = false
 
-			while ((match = importRegex.exec(code)) !== null) {
-				hasMatch = true
-				const varName = match[1]
-				const importPath = match[2]
+			for (const i of cssImports.reverse()) {
+				const varName = code
+					.slice(i.importStart, i.start)
+					.match(/import\s+(\w+)\s+from/)?.[1]
 
-				if (!importPath) continue
+				const importPath = i.specifier
+
+				if (!varName || !importPath) continue
 
 				const absPath = path.resolve(path.dirname(id), importPath)
 				let cssContent = await fs.promises.readFile(absPath, 'utf8')
@@ -36,10 +47,14 @@ export function cssModules(): Plugin {
 const ${varName} = new CSSStyleSheet();
 ${varName}.replaceSync(\`${cssContent}\`);
 `
-				transformed = transformed.replace(match[0], replacement)
+
+				transformed =
+					transformed.slice(0, i.importStart) +
+					replacement +
+					transformed.slice(i.importEnd)
 			}
 
-			if (!hasMatch) return null
+			if (transformed === code) return null
 			return {code: transformed, map: null}
 		},
 	}

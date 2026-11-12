@@ -7,7 +7,8 @@
 		"useDefineForClassFields": false,
 		"experimentalDecorators": true,
 		"noUncheckedIndexedAccess": true,
-		"outDir": "./lib",
+		"outDir": "./lib/",
+		"rootDir": "./src/",
 		"declaration": true,
 		"declarationMap": true,
 		"sourceMap": true
