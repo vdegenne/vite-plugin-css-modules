@@ -9,7 +9,8 @@ export function cssModules(): Plugin {
 		enforce: 'pre',
 
 		async transform(code, id) {
-			if (!id.endsWith('.ts') && !id.endsWith('.js')) return null
+			const cleanId = id.replace(/[?#].*$/, '')
+			if (!cleanId.endsWith('.ts') && !cleanId.endsWith('.js')) return null
 
 			await init()
 			const [imports] = parse(code)
@@ -35,7 +36,7 @@ export function cssModules(): Plugin {
 
 				if (!varName || !importPath) continue
 
-				const absPath = path.resolve(path.dirname(id), importPath)
+				const absPath = path.resolve(path.dirname(cleanId), importPath)
 				let cssContent = await fs.promises.readFile(absPath, 'utf8')
 
 				cssContent = cssContent
